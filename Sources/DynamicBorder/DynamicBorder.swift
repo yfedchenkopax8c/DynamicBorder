@@ -91,7 +91,7 @@ public struct DynamicBorderView<Content: View>: View {
             Color.gray
                 .opacity(0.1)
             VStack {
-                Text("Liqued corners effectLiqued corners effectLiqued corners effec")
+                Text("Card")
                     .lineLimit(1)
                     .foregroundStyle(.white)
             }
