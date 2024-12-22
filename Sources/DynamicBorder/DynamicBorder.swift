@@ -80,7 +80,6 @@ public struct DynamicBorderView<Content: View>: View {
 
     public var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius)
-            .fill(Color.black)
             .readSize(to: $size)
             .overlay(content: {
                 content()
