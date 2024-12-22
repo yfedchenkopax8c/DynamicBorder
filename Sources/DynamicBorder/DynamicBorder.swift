@@ -17,6 +17,30 @@ public struct DynamicBorderView<Content: View>: View {
     @State
     private var rotationDegree: CGFloat = 0
 
+    private var adjustedSize: CGSize {
+        if size.width > size.height {
+            return CGSize(width: size.width * 2, height: lineLength)
+        } else {
+            return CGSize(width: lineLength, height: size.height * 2)
+        }
+    }
+
+    private var startPoint: UnitPoint {
+        if size.width > size.height {
+            return .top
+        } else {
+            return .leading
+        }
+    }
+
+    private var endPoint: UnitPoint {
+        if size.width > size.height {
+            return .bottom
+        } else {
+            return .trailing
+        }
+    }
+
     public init(
         color: Color = .red,
         lineLength: CGFloat = 140,
@@ -64,18 +88,18 @@ public struct DynamicBorderView<Content: View>: View {
             })
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .foregroundStyle(.linearGradient(.init(colors: colors), startPoint: .leading, endPoint: .trailing))
+                    .foregroundStyle(.linearGradient(.init(colors: colors), startPoint: startPoint, endPoint: endPoint))
                     .rotationEffect(.degrees(rotationDegree))
                     .mask {
-                        RoundedRectangle(cornerRadius: cornerRadius - 5)
+                        RoundedRectangle(cornerRadius: cornerRadius)
                             .stroke(lineWidth: lineThickness)
                             .frame(width: size.width, height: size.height)
                     }
                     .mask {
-                        RoundedRectangle(cornerRadius: cornerRadius - 5)
+                        RoundedRectangle(cornerRadius: cornerRadius)
                             .frame(width: size.width, height: size.height)
                     }
-                    .frame(width: lineLength, height: size.height * 2)
+                    .frame(width: adjustedSize.width, height: adjustedSize.height)
             )
             .onAppear {
                 withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
@@ -83,6 +107,24 @@ public struct DynamicBorderView<Content: View>: View {
                 }
             }
     }
+}
+
+#Preview("Small Height") {
+    DynamicBorderView(lineLength: 140, lineThickness: 4, cornerRadius: 14, duration: 8, content: {
+        ZStack {
+            Color.gray
+                .opacity(0.1)
+            VStack {
+                Text("Card")
+                    .lineLimit(1)
+                    .foregroundStyle(.white)
+            }
+            .padding(.horizontal)
+        }
+    })
+    .frame(width: 340, height: 80)
+    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+    .background(.black.opacity(0.85))
 }
 
 #Preview {
