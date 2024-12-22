@@ -105,6 +105,7 @@ public struct DynamicBorderView<Content: View>: View {
                     rotationDegree = 360
                 }
             }
+            .accentColor(.clear)
     }
 }
 
@@ -112,7 +113,7 @@ public struct DynamicBorderView<Content: View>: View {
     DynamicBorderView(lineLength: 140, lineThickness: 4, cornerRadius: 14, duration: 8, content: {
         ZStack {
             Color.gray
-                .opacity(0.1)
+                .opacity(0.5)
             VStack {
                 Text("Card")
                     .lineLimit(1)
